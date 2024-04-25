@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequiredArgsConstructor
@@ -17,44 +18,53 @@ public class AircraftController {
     private final IAircraftService aircraftService;
 
     @GetMapping("/aircrafts")
-    public String showAircraftsList(@RequestParam(defaultValue = "0") int pageNo, Model model) {
+    public ModelAndView showAircraftsList(@RequestParam(defaultValue = "0") int pageNo) {
 
-        model.addAttribute("aircraft", aircraftService.getAllAircraftsPaged(pageNo));
-        model.addAttribute("currentPage", pageNo);
-        return "secured/aircraft/aircraft";
+        ModelAndView modelAndView = new ModelAndView("secured/aircraft/aircraft");
+        modelAndView.addObject("aircraft", aircraftService.getAllAircraftsPaged(pageNo));
+        modelAndView.addObject("currentPage", pageNo);
+        return modelAndView;
+
     }
 
     @GetMapping("/aircraft/new")
-    public String showAddAircraftPage(Model model) {
+    public ModelAndView showAddAircraftPage() {
 
-        model.addAttribute("aircraft", new AircraftDto());
-        return "secured/aircraft/newAircraft";
+        ModelAndView modelAndView = new ModelAndView("secured/aircraft/newAircraft");
+        modelAndView.addObject("aircraft", new AircraftDto());
+        return modelAndView;
+
     }
 
     @PostMapping("/aircraft/new")
-    public String saveAircraft(@Valid @ModelAttribute("aircraft") AircraftDto aircraftDto, Model model,
-                               BindingResult bindingResult) {
+    public ModelAndView saveAircraft(@Valid @ModelAttribute("aircraft") AircraftDto aircraftDto,
+                                     BindingResult bindingResult) {
+
+        ModelAndView modelAndView = new ModelAndView();
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("errors", bindingResult.getAllErrors());
-            model.addAttribute("aircraft", new AircraftDto());
-            return "secured/aircraft/newAircraft";
+            modelAndView.addObject("errors", bindingResult.getAllErrors());
+            modelAndView.addObject("aircraft", new AircraftDto());
+            modelAndView.setViewName("secured/aircraft/newAircraft");
+            return modelAndView;
         }
 
         aircraftService.addAircraft(aircraftDto);
-        model.addAttribute("aircraft", aircraftService.getAllAircraftsPaged(0));
-        model.addAttribute("currentPage", 0);
-        return "secured/aircraft/aircraft";
+        modelAndView.addObject("aircraft", aircraftService.getAllAircraftsPaged(0));
+        modelAndView.addObject("currentPage", 0);
+        modelAndView.setViewName("secured/aircraft/aircraft");
+        return modelAndView;
 
     }
 
     @GetMapping("/aircraft/delete")
-    public String deleteAircraft(@PathParam("aircraftId") Long aircraftId, Model model) {
+    public ModelAndView deleteAircraft(@PathParam("aircraftId") Long aircraftId) {
 
         aircraftService.deleteAircraftById(aircraftId);
-        model.addAttribute("aircraft", aircraftService.getAllAircraftsPaged(0));
-        model.addAttribute("currentPage", 0);
-        return "secured/aircraft/aircraft";
+        ModelAndView modelAndView = new ModelAndView("secured/aircraft/aircraft");
+        modelAndView.addObject("aircraft", aircraftService.getAllAircraftsPaged(0));
+        modelAndView.addObject("currentPage", 0);
+        return modelAndView;
 
     }
 }

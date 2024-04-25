@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -26,70 +27,78 @@ public class PassengerController {
 
 
     @GetMapping("/flight/book/new")
-    public String customerInfoPage(@RequestParam("flightId") Long flightId, Model model) {
+    public ModelAndView customerInfoPage(@RequestParam("flightId") Long flightId) {
 
-        model.addAttribute("flightId", flightId);
-        model.addAttribute("passenger", new Passenger());
-        return "secured/passenger/newPassenger";
+        ModelAndView modelAndView = new ModelAndView("secured/passenger/newPassenger");
+        modelAndView.addObject("flightId", flightId);
+        modelAndView.addObject("passenger", new Passenger());
+        return modelAndView;
     }
 
     @PostMapping("/flight/book/new")
-    public String bookFlight(@Valid @ModelAttribute PassengerDto passengerDto, BindingResult bindingResult,
-                             @RequestParam("flightId") Long flightId, Model model) {
+    public ModelAndView bookFlight(@Valid @ModelAttribute PassengerDto passengerDto, BindingResult bindingResult,
+                                   @RequestParam("flightId") Long flightId) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("secured/booking/errorPage");
+            return modelAndView;
+        }
 
         FlightDto flightDto = flightService.getFlight(flightId);
-        PassengerDto passenger1 = passengerDto;
-        passenger1.setFlight(flightDto);
-        passengerService.addPassenger(passenger1);
-        model.addAttribute("passenger", passenger1);
-        return "secured/booking/confirmationPage";
+        passengerDto.setFlight(flightDto);
+        passengerService.addPassenger(passengerDto);
+
+        modelAndView.addObject("passenger", passengerDto);
+        modelAndView.setViewName("secured/booking/confirmationPage");
+
+        return modelAndView;
     }
 
     @GetMapping("/flight/book/verify")
-    public String showVerifyBookingPage() {
+    public ModelAndView showVerifyBookingPage() {
 
-        return "secured/booking/verifyBooking";
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("secured/booking/verifyBooking");
+        return modelAndView;
     }
 
     @PostMapping("/flight/book/verify")
-    public String showVerifyBookingPageResult(@RequestParam("flightId") Long flightId,
-                                              @RequestParam("passengerId") Long passengerId, Model model) {
+    public ModelAndView showVerifyBookingPageResult(@RequestParam("flightId") Long flightId,
+                                                    @RequestParam("passengerId") Long passengerId) {
 
+        ModelAndView modelAndView = new ModelAndView("secured/booking/verifyBooking");
         FlightDto flight = flightService.getFlight(flightId);
+
         if (flight != null) {
-
-            model.addAttribute("flight", flight);
+            modelAndView.addObject("flight", flight);
             List<PassengerDto> passengers = flight.getPassengers();
-            PassengerDto passenger = null;
-            for (PassengerDto p : passengers) {
+            PassengerDto passenger = passengers.stream()
+                    .filter(p -> p.getPassengerId().equals(passengerId))
+                    .findFirst()
+                    .orElse(null);
 
-                if (p.getPassengerId().equals(passengerId)) {
-                    passenger = passengerService.getPassenger(passengerId);
-                    model.addAttribute("passenger", passenger);
-                }
-            }
             if (passenger != null) {
-
-                return "secured/booking/verifyBooking";
+                passenger = passengerService.getPassenger(passengerId);
+                modelAndView.addObject("passenger", passenger);
             } else {
-
-                model.addAttribute("notFound", "Not Found");
-                return "secured/booking/verifyBooking";
+                modelAndView.addObject("notFound", "Passenger Not Found");
             }
         } else {
-
-            model.addAttribute("notFound", "Not Found");
-            return "secured/booking/verifyBooking";
+            modelAndView.addObject("notFound", "Flight Not Found");
         }
+        return modelAndView;
+
     }
 
     @PostMapping("/flight/book/cancel")
-    public String cancelTicket(@RequestParam("passengerId") Long passengerId, Model model) {
+    public ModelAndView cancelTicket(@RequestParam("passengerId") Long passengerId) {
 
         passengerService.deletePassenger(passengerId);
-        model.addAttribute("flights", flightService.getAllFlightsPaged(0));
-        model.addAttribute("currentPage", 0);
-        return "secured/flight/flights";
+        ModelAndView modelAndView = new ModelAndView("secured/flight/flights");
+        modelAndView.addObject("flights", flightService.getAllFlightsPaged(0));
+        modelAndView.addObject("currentPage", 0);
+        return modelAndView;
     }
 
 }

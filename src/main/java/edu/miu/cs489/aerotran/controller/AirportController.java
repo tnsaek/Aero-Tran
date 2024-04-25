@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -20,43 +22,57 @@ public class AirportController {
     private final IAirportService airportService;
 
     @GetMapping("/airports")
-    public String showAirportsList(@RequestParam(defaultValue = "0") int pageNo, Model model) {
+    public ModelAndView showAirportsList(@RequestParam(defaultValue = "0") int pageNo) {
+
+        ModelAndView modelAndView = new ModelAndView("secured/airport/airport");
         AirportDto airportDto = new AirportDto();
-        model.addAttribute("address", airportDto.getAddress());
-        model.addAttribute("airports", airportService.getAllAirportPaged(pageNo));
-        model.addAttribute("currentPage", pageNo);
-        return "secured/airport/airport";
+        modelAndView.addObject("address", airportDto.getAddress());
+        modelAndView.addObject("airports", airportService.getAllAirportPaged(pageNo));
+        modelAndView.addObject("currentPage", pageNo);
+        return modelAndView;
+
     }
 
     @GetMapping("/airport/new")
-    public String showAddAirportPage(Model model) {
-        model.addAttribute("airport", new Airport());
-        return "secured/airport/newAirport";
+    public ModelAndView showAddAirportPage() {
+
+        ModelAndView modelAndView = new ModelAndView("secured/airport/newAirport");
+        modelAndView.addObject("airport", new Airport());
+        return modelAndView;
+
     }
 
     @PostMapping("/airport/new")
-    public String saveAirport(@Valid @ModelAttribute("airport") AirportDto airportDto, BindingResult bindingResult,
-                              Model model) {
+    public ModelAndView saveAirport(@Valid @ModelAttribute("airport") AirportDto airportDto, BindingResult bindingResult) {
+
+        ModelAndView modelAndView = new ModelAndView();
 
         if (bindingResult.hasErrors()) {
-
-            model.addAttribute("errors", bindingResult.getAllErrors());
-            model.addAttribute("address", airportDto.getAddress());
-            model.addAttribute("airports", new AirportDto());
-            return "secured/airport/newAirport";
+            modelAndView.setViewName("secured/airport/newAirport");
+            modelAndView.addObject("errors", bindingResult.getAllErrors());
+            modelAndView.addObject("address", airportDto.getAddress());
+            modelAndView.addObject("airports", new AirportDto());
+            return modelAndView;
         }
+
         airportService.addAirport(airportDto);
-        model.addAttribute("airports", airportService.getAllAirportPaged(0));
-        model.addAttribute("currentPage", 0);
-        return "secured/airport/airport";
+        modelAndView.setViewName("secured/airport/airport");
+        modelAndView.addObject("airports", airportService.getAllAirportPaged(0));
+        modelAndView.addObject("currentPage", 0);
+
+        return modelAndView;
+
     }
 
     @GetMapping("/airport/delete")
-    public String deleteAirport(@RequestParam("airportId") Long airportId, Model model) {
+    public ModelAndView deleteAirport(@RequestParam("airportId") Long airportId) {
 
         airportService.deleteAirport(airportId);
-        model.addAttribute("airports", airportService.getAllAirportPaged(0));
-        model.addAttribute("currentPage", 0);
-        return "secured/airport/airport";
+        ModelAndView modelAndView = new ModelAndView("secured/airport/airport");
+        modelAndView.addObject("airports", airportService.getAllAirportPaged(0));
+        modelAndView.addObject("currentPage", 0);
+
+        return modelAndView;
+
     }
 }
