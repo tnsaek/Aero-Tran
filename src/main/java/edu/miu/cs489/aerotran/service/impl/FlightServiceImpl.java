@@ -40,6 +40,7 @@ public class FlightServiceImpl implements IFlightService {
         flight.setAircraft(aircraft);
         Flight savedFlight = flightRepository.save(flight);
         return mapper.map(savedFlight, FlightDto.class);
+
     }
 
     @Override

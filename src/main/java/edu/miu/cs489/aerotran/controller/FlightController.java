@@ -44,17 +44,17 @@ public class FlightController {
 
         System.out.println(departureAirport);
 
-        if (bindingResult.hasErrors()) {
+        System.out.println(departureAirport);
 
+        if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
-            model.addAttribute("flight", new FlightDto());
-            model.addAttribute("aircrafts", aircraftService.getAllAircrafts());
-            model.addAttribute("airports", airportService.getAllAirports());
-            return "secured/flight/newFlight";
         }
 
         if (departureAirport == arrivalAirport) {
-            model.addAttribute("sameAirportError", "Departure and Destination Airports can't be same");
+            model.addAttribute("sameAirportError", "Departure and Destination Airports can't be the same");
+        }
+
+        if (bindingResult.hasErrors() || departureAirport == arrivalAirport) {
             model.addAttribute("flight", new FlightDto());
             model.addAttribute("aircrafts", aircraftService.getAllAircrafts());
             model.addAttribute("airports", airportService.getAllAirports());
