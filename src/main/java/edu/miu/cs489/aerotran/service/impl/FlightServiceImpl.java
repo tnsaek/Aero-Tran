@@ -30,24 +30,14 @@ public class FlightServiceImpl implements IFlightService {
 
     @Override
     public FlightDto addFlight(FlightDto flightDto) {
-
-        System.out.println("flightDto "+flightDto);
-
         Airport arrivalAirport = mapper.map(flightDto.getDepartureAirport(), Airport.class);
         Airport departureAirport = mapper.map(flightDto.getDepartureAirport(), Airport.class);
         Aircraft aircraft = mapper.map(flightDto.getAircraft(), Aircraft.class);
         Flight flight = mapper.map(flightDto, Flight.class);
-
-        System.out.println("flight "+flight);
-
-        System.out.println(flight);
         flight.setArrivalAirport(arrivalAirport);
         flight.setDepartureAirport(departureAirport);
         flight.setAircraft(aircraft);
         Flight savedFlight = flightRepository.save(flight);
-
-        System.out.println("savedflight " + savedFlight);
-
         return mapper.map(savedFlight, FlightDto.class);
 
     }

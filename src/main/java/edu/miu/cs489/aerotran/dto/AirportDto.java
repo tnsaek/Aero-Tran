@@ -13,5 +13,6 @@ public class AirportDto {
     private  String name;
     private List<FlightDto> departureFlightDtos;
     private List<FlightDto> arrivalFlightDtos;
+    private List<FlightDto> flights;
     private AddressDto address;
 }

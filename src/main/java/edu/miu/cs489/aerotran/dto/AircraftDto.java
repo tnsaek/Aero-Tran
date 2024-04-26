@@ -14,4 +14,5 @@ public class AircraftDto {
     private String type;
     private Integer seats;
     private List<FlightDto> flightDtos;
+
 }

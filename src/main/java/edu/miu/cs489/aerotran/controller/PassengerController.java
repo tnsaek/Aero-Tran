@@ -2,23 +2,23 @@ package edu.miu.cs489.aerotran.controller;
 
 import edu.miu.cs489.aerotran.dto.FlightDto;
 import edu.miu.cs489.aerotran.dto.PassengerDto;
-import edu.miu.cs489.aerotran.entity.Flight;
 import edu.miu.cs489.aerotran.entity.Passenger;
 import edu.miu.cs489.aerotran.service.IFlightService;
 import edu.miu.cs489.aerotran.service.IPassengerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping
 public class PassengerController {
 
     private final IPassengerService passengerService;
@@ -53,8 +53,7 @@ public class PassengerController {
         ModelAndView modelAndView = new ModelAndView();
 
         if (bindingResult.hasErrors()) {
-            modelAndView.addObject("errors", bindingResult.getAllErrors());
-            modelAndView.setViewName("secured/passenger/newPassenger");
+            modelAndView.setViewName("secured/booking/errorPage");
             return modelAndView;
         }
 
@@ -78,7 +77,7 @@ public class PassengerController {
 
     @PostMapping("/flight/book/verify")
     public ModelAndView showVerifyBookingPageResult(@RequestParam("flightId") Long flightId,
-                                              @RequestParam("passengerId") Long passengerId) {
+                                                    @RequestParam("passengerId") Long passengerId) {
 
         ModelAndView modelAndView = new ModelAndView("secured/booking/verifyBooking");
         FlightDto flight = flightService.getFlight(flightId);

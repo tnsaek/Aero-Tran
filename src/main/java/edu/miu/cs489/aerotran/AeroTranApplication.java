@@ -18,9 +18,11 @@ public class AeroTranApplication implements CommandLineRunner {
 	private final UserRepository userRepository;
 	private final PasswordEncoder encoder;
 
+
 	public static void main(String[] args) {
 		SpringApplication.run(AeroTranApplication.class, args);
 	}
+
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -36,4 +38,5 @@ public class AeroTranApplication implements CommandLineRunner {
 		userRepository.save(user1);
 		userRepository.save(user2);
 	}
+
 }

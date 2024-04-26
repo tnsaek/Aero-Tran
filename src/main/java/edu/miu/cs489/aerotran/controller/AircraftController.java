@@ -12,7 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping
 public class AircraftController {
 
     private final IAircraftService aircraftService;
@@ -38,7 +37,7 @@ public class AircraftController {
 
     @PostMapping("/aircraft/new")
     public ModelAndView saveAircraft(@Valid @ModelAttribute("aircraft") AircraftDto aircraftDto,
-                               BindingResult bindingResult) {
+                                     BindingResult bindingResult) {
 
         ModelAndView modelAndView = new ModelAndView();
 

@@ -23,6 +23,9 @@ public class Airport {
     @OneToMany(mappedBy = "arrivalAirport", cascade = CascadeType.REMOVE)
     @JsonBackReference
     private List<Flight> arrivalFlights;
+    @OneToMany(mappedBy = "departureAirport")
+    @JsonBackReference
+    private List<Flight> flights;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;

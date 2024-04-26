@@ -21,7 +21,6 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping
 public class FlightController {
 
     private final IFlightService flightService;
@@ -41,9 +40,9 @@ public class FlightController {
 
     @PostMapping("/flight/new")
     public ModelAndView saveFlight(@Valid @ModelAttribute("flight") FlightDto flightDto, BindingResult bindingResult,
-                             @RequestParam("departureAirport") Long departureAirport,
-                             @RequestParam("arrivalAirport") Long arrivalAirport, @RequestParam(required = false) Long aircraftId,
-                             @RequestParam("arrivalTime") String arrivalTime, @RequestParam("departureTime") String departureTime) {
+                                   @RequestParam("departureAirport") Long departureAirport,
+                                   @RequestParam("arrivalAirport") Long arrivalAirport, @RequestParam(required = false) Long aircraftId,
+                                   @RequestParam("arrivalTime") String arrivalTime, @RequestParam("departureTime") String departureTime) {
 
         ModelAndView modelAndView = new ModelAndView();
         System.out.println("departureAirport " + departureAirport);
@@ -110,8 +109,8 @@ public class FlightController {
 
     @PostMapping("/flight/search")
     public ModelAndView searchFlight(@RequestParam("departureAirport") Long departureAirport,
-                               @RequestParam("arrivalAirport") Long arrivalAirport,
-                               @RequestParam("departureTime") LocalDate departureDate) {
+                                     @RequestParam("arrivalAirport") Long arrivalAirport,
+                                     @RequestParam("departureTime") LocalDate departureDate) {
 
         ModelAndView modelAndView = new ModelAndView("secured/flight/searchFlight");
         AirportDto depAirport = airportService.getAirport(departureAirport);
@@ -146,8 +145,8 @@ public class FlightController {
 
     @PostMapping("/flight/book")
     public ModelAndView searchFlightToBook(@RequestParam("departureAirport") Long departureAirport,
-                                     @RequestParam("destinationAirport") Long destinationAirport,
-                                     @RequestParam("departureDate") LocalDate departureDate) {
+                                           @RequestParam("destinationAirport") Long destinationAirport,
+                                           @RequestParam("departureDate") LocalDate departureDate) {
 
         ModelAndView modelAndView = new ModelAndView("secured/flight/bookFlight");
         AirportDto departurAirport = airportService.getAirport(departureAirport);
