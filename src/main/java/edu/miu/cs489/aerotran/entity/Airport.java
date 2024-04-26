@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -29,4 +29,17 @@ public class Airport {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Airport airport = (Airport) o;
+        return Objects.equals(airportId, airport.airportId) && Objects.equals(name, airport.name) && Objects.equals(address, airport.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(airportId, name, address);
+    }
 }

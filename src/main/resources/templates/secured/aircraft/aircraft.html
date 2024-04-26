@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master-layout}">
+<meta charset="UTF-8">
+<title>Aircraft</title>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-6">
+            <h1 style="color: darkblue">Aircraft List</h1>
+        </div>
+        <div class="col-md-6">
+            <a th:href="@{/aircraft/new}"><button type="button" class="btn btn-outline-primary" style="float: right">Add
+                Aircraft</button></a>
+        </div>
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr class="table-active">
+            <th scope="col">Aircraft ID</th>
+            <th scope="col">Type</th>
+            <th scope="col">Available seats</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <div >
+            <tr th:each="aircraft, iterStat:${aircraft}" cstyle="background-color: #fdfdfd">
+                <th scope="row" th:text="${aircraft.aircraftId}">Dark</th>
+                <td th:text="${aircraft.type}"></td>
+                <td th:text="${aircraft.seats}"></td>
+                <td><a
+                        th:href="@{/aircraft/delete(aircraftId=${aircraft.aircraftId})}"><button
+                        type="button" class="btn btn-outline-danger btn-sm"
+                        onclick="alert('Are you sure you want to delete?')">Delete</button></a></td>
+            </tr>
+        </div>
+        </tbody>
+    </table>
+    <div>
+        <ul class="pagination">
+            <li class="page-item disabled"><a class="page-link" href="#">Pages:</a>
+            </li>
+            <th:block th:each="i:${#numbers.sequence(1,aircraft.totalPages)}">
+                <li
+                        th:class="${currentPage}==(${i-1}) ? 'page-item active' : 'page-item'">
+                    <a class="page-link" th:href="@{/aircraft(pageNo=(${i-1}))}"
+                       th:text="${i}"></a>
+                </li>
+            </th:block>
+        </ul>
+
+
+    </div>
+</th:block>
+</body>
+</html>

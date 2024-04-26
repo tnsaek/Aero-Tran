@@ -2,6 +2,9 @@ package edu.miu.cs489.aerotran.controller;
 
 import edu.miu.cs489.aerotran.dto.AirportDto;
 import edu.miu.cs489.aerotran.dto.FlightDto;
+import edu.miu.cs489.aerotran.entity.Aircraft;
+import edu.miu.cs489.aerotran.entity.Airport;
+import edu.miu.cs489.aerotran.entity.Flight;
 import edu.miu.cs489.aerotran.service.IAircraftService;
 import edu.miu.cs489.aerotran.service.IAirportService;
 import edu.miu.cs489.aerotran.service.IFlightService;
@@ -13,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -39,14 +41,12 @@ public class FlightController {
     }
 
     @PostMapping("/flight/new")
-    public ModelAndView saveFlight(@Valid @ModelAttribute("flight") FlightDto flightDto, BindingResult bindingResult,
+    public ModelAndView saveFlight(@Valid @ModelAttribute("flight") Flight flight, BindingResult bindingResult,
                                    @RequestParam("departureAirport") Long departureAirport,
                                    @RequestParam("arrivalAirport") Long arrivalAirport, @RequestParam(required = false) Long aircraftId,
                                    @RequestParam("arrivalTime") String arrivalTime, @RequestParam("departureTime") String departureTime) {
 
         ModelAndView modelAndView = new ModelAndView();
-        System.out.println("departureAirport " + departureAirport);
-        System.out.println("arrivalAirport " + arrivalAirport);
 
         if (bindingResult.hasErrors()) {
             modelAndView.addObject("errors", bindingResult.getAllErrors());
@@ -57,12 +57,9 @@ public class FlightController {
         }
 
         if (bindingResult.hasErrors() || departureAirport.equals(arrivalAirport)) {
-            modelAndView.addObject("flight", new FlightDto());
+            modelAndView.addObject("flight", new Flight());
             modelAndView.addObject("aircrafts", aircraftService.getAllAircrafts());
             modelAndView.addObject("airports", airportService.getAllAirports());
-
-            System.out.println(aircraftService.getAllAircrafts());
-            System.out.println(airportService.getAllAirports());
 
             modelAndView.setViewName("secured/flight/newFlight");
             return modelAndView;
@@ -72,14 +69,18 @@ public class FlightController {
         LocalTime arrivalTime1 = LocalTime.parse(arrivalTime, formatter);
         LocalTime departureTime1 = LocalTime.parse(departureTime, formatter);
 
-        flightDto.setAircraft(aircraftService.getAircraft(aircraftId));
-        flightDto.setDepartureAirport(airportService.getAirport(departureAirport));
-        flightDto.setArrivalAirport(airportService.getAirport(arrivalAirport));
-        flightDto.setDepartureTime(departureTime1);
-        flightDto.setArrivalTime(arrivalTime1);
-        flightService.addFlight(flightDto);
+        Aircraft aircraft = mapper.map(aircraftService.getAircraft(aircraftId), Aircraft.class);
+        Airport departureAirport1 = mapper.map(airportService.getAirport(departureAirport), Airport.class);
+        Airport arrivalAirport1 = mapper.map(airportService.getAirport(arrivalAirport), Airport.class);
 
-        System.out.println("flightDto " + flightDto);
+        flight.setAircraft(aircraft);
+        flight.setDepartureAirport(departureAirport1);
+        flight.setArrivalAirport(arrivalAirport1);
+        flight.setDepartureTime(departureTime1);
+        flight.setArrivalTime(arrivalTime1);
+        flightService.addFlight(flight);
+
+        System.out.println("flightDto " + flight);
 
         modelAndView.addObject("flights", flightService.getAllFlightsPaged(0));
         modelAndView.addObject("currentPage", 0);
@@ -113,8 +114,11 @@ public class FlightController {
                                      @RequestParam("departureTime") LocalDate departureDate) {
 
         ModelAndView modelAndView = new ModelAndView("secured/flight/searchFlight");
-        AirportDto depAirport = airportService.getAirport(departureAirport);
-        AirportDto destAirport = airportService.getAirport(arrivalAirport);
+        AirportDto depAirportDto = airportService.getAirport(departureAirport);
+        AirportDto destAirportDto = airportService.getAirport(arrivalAirport);
+
+        Airport depAirport = mapper.map(depAirportDto, Airport.class);
+        Airport destAirport = mapper.map(destAirportDto, Airport.class);
 
         if (depAirport.equals(destAirport)) {
             modelAndView.addObject("AirportError", "Departure and Arrival have to be different");
@@ -122,7 +126,7 @@ public class FlightController {
             return modelAndView;
         }
 
-        List<FlightDto> flights = flightService.FlightsWithDepDateFromDepCityToArrCity(departureDate, depAirport, destAirport);
+        List<Flight> flights = flightService.FlightsWithDepDateFromDepCityToArrCity(depAirport, destAirport, departureDate);
         if (flights.isEmpty()) {
             modelAndView.addObject("notFound", "check another date");
         } else {
@@ -149,16 +153,19 @@ public class FlightController {
                                            @RequestParam("departureDate") LocalDate departureDate) {
 
         ModelAndView modelAndView = new ModelAndView("secured/flight/bookFlight");
-        AirportDto departurAirport = airportService.getAirport(departureAirport);
-        AirportDto arrivalAirport = airportService.getAirport(destinationAirport);
+        AirportDto depAirportDto = airportService.getAirport(departureAirport);
+        AirportDto desAirportDto = airportService.getAirport(destinationAirport);
 
-        if (departurAirport == arrivalAirport) {
+        Airport depAirport = mapper.map(depAirportDto, Airport.class);
+        Airport desAirport = mapper.map(desAirportDto, Airport.class);
+
+        if (depAirport == desAirport) {
             modelAndView.addObject("AirportError", "Departure airport and Arrival have to be different");
             modelAndView.addObject("airports", airportService.getAllAirports());
             return modelAndView;
         }
 
-        List<FlightDto> flights = flightService.FlightsWithDepDateFromDepCityToArrCity(departureDate, departurAirport, arrivalAirport);
+        List<Flight> flights = flightService.FlightsWithDepDateFromDepCityToArrCity(depAirport, desAirport, departureDate);
         if (flights.isEmpty()) {
             modelAndView.addObject("notFound", "Check another date");
         } else {

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master-layout}">
+
+<body>
+<th:block layout:fragment="content">
+    <div class="row">
+        <div class="row">
+            <div class="col-md-12" style="margin-bottom: 10px">
+                <h1 style="color: darkblue">Add New Aircraft </h1>
+            </div>
+
+        </div>
+    </div>
+
+    <form th:action="@{/aircraft/new}" method="post" th:object="${aircraft}">
+        <div class="row justify-content-md-center">
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    <label class="col-form-label" for="type">Type</label>
+                    <span th:if="${#fields.hasErrors('type')}" th:errors="*{type}"
+                          class="badge badge-danger"></span>
+                    <input type="text" class="form-control" placeholder="" id="type"
+                           name="type" th:value="${aircraft.type}" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-form-label" for="seats">Number of seats</label>
+                    <span th:if="${#fields.hasErrors('seats')}" th:errors="*{seats}"
+                          class="badge badge-danger"></span>
+                    <input type="text" class="form-control" placeholder="" id="seats"
+                           name="seats" th:value="${aircraft.seats}" required>
+                </div>
+
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success" style="float: right">Save</button>
+                </div>
+
+
+            </div>
+
+        </div>
+    </form>
+
+</th:block>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package edu.miu.cs489.aerotran.dto;
 
+import edu.miu.cs489.aerotran.entity.Flight;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,6 @@ public class PassengerDto {
     private String phoneNumber;
     private String passportNumber;
     private String email;
-    private FlightDto flight;
+    private Flight flight;
     private AddressDto address;
 }

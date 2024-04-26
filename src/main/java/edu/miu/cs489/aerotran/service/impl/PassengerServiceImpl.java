@@ -7,7 +7,6 @@ import edu.miu.cs489.aerotran.service.IPassengerService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,9 +32,9 @@ public class PassengerServiceImpl implements IPassengerService {
     }
 
     @Override
-    public PassengerDto getPassenger(Long passengerId) {
-        Passenger passenger = passengerRepository.findById(passengerId).orElse(null);
-        return mapper.map(passenger, PassengerDto.class);
+    public Passenger getPassenger(Long passengerId) {
+        return passengerRepository.findById(passengerId).orElse(null);
+
     }
 
     @Override

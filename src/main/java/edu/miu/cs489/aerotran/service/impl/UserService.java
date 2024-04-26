@@ -2,6 +2,7 @@ package edu.miu.cs489.aerotran.service.impl;
 
 import edu.miu.cs489.aerotran.dto.UserDto;
 import edu.miu.cs489.aerotran.entity.User;
+import edu.miu.cs489.aerotran.exception.UserAlreadyExistsException;
 import edu.miu.cs489.aerotran.repository.UserRepository;
 import edu.miu.cs489.aerotran.service.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,11 @@ public class UserService implements IUserService {
     private final PasswordEncoder encoder;
 
     @Override
-    public UserDto addUser(UserDto userDto) {
+    public UserDto addUser(UserDto userDto) throws UserAlreadyExistsException {
         User user = mapper.map(userDto, User.class);
+        if(userRepository.existsUserByEmail(user.getEmail())) {
+            throw new UserAlreadyExistsException("user with email " + user.getEmail() + " already exists.");
+        }
         user.setPassword(encoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
         return mapper.map(savedUser, UserDto.class);

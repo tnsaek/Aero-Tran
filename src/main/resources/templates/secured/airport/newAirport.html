@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master-layout}">
+
+<body>
+<th:block layout:fragment="content">
+    <div class="row">
+        <div class="row">
+            <div class="col-md-12" style="margin-bottom: 10px">
+                <h1 style="color: darkblue">Add New Airport </h1>
+            </div>
+
+        </div>
+    </div>
+
+    <form th:action="@{/airport/new}" method="post" th:object="${airport}">
+        <div class="row">
+
+
+<!--            <div class="form-group col-md-6">-->
+<!--                <label class="col-form-label" for="airportCode">Airport code</label>-->
+<!--                <span th:if="${#fields.hasErrors('airportCode')}" th:errors="*{airportCode}"-->
+<!--                      class="badge badge-danger"></span>-->
+<!--                <input type="text" class="form-control" placeholder="" id="airportCode"-->
+<!--                       name="airportCode" th:value="${airport.airportCode}" required>-->
+<!--            </div>-->
+
+            <div class="form-group col-md-6">
+                <label class="col-form-label" for="name">Airport Name</label>
+                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                      class="badge badge-danger"></span>
+                <input type="text" class="form-control" placeholder="" id="name"
+                       name="name" th:value="${airport.name}" required>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label class="col-form-label" for="city">City</label>
+                <span th:if="${#fields.hasErrors('address.city')}" th:errors="*{address.city}"
+                      class="badge badge-danger"></span>
+                <input type="text" class="form-control" placeholder="" id="city"
+                       name="address.city" th:value="${airport.address.city}" required>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label class="col-form-label" for="state">State</label>
+                <span th:if="${#fields.hasErrors('address.state')}" th:errors="*{address.state}"
+                      class="badge badge-danger"></span>
+                <input type="text" class="form-control" placeholder="" id="state"
+                       name="address.state" th:value="${airport.address.state}" required>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label class="col-form-label" for="country">Country</label>
+                <span th:if="${#fields.hasErrors('address.country')}" th:errors="*{address.country}"
+                      class="badge badge-danger"></span>
+                <input type="text" class="form-control" placeholder="" id="country"
+                       name="address.country" th:value="${airport.address.country}" required>
+            </div>
+
+            <div class="form-group col-12">
+                <button type="submit" class="btn btn-success" style="float: right">Save</button>
+            </div>
+
+        </div>
+    </form>
+
+</th:block>
+</body>
+</html>

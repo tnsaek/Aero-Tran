@@ -11,15 +11,11 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity
 @RequiredArgsConstructor
 public class ConfigClass {
 
@@ -30,37 +26,29 @@ public class ConfigClass {
         return new ModelMapper();
     }
 
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(
-                        auth -> {
-                            try {
-                                auth
-                                        .requestMatchers("/","/login", "/flight/search").permitAll()
-                                        .requestMatchers("/aircrafts", "/aircraft/**", "/airports", "/airport/**", "/flights","/flight/new",
-                                                "flight/delete", "/passengers").hasAuthority("ADMIN")
-                                        .requestMatchers("/flight/book", "/flight/new", "/flight/verify", "/book/cancel").authenticated()
-                                        .and()
-                                        .formLogin().loginPage("/login")
-                                        .usernameParameter("username")
-                                        .passwordParameter("password")
-                                        .defaultSuccessUrl("/")
-                                        .and()
-                                        .logout().logoutUrl("logout")
-                                        .logoutSuccessUrl("/login/logout")
-                                        .and().csrf().disable();
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider())
+//                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/login", "/flight/search").permitAll()
+                        .requestMatchers("/aircrafts", "/aircraft/**", "/airports", "/airport/**", "/flights", "/flight/new",
+                                "flight/delete", "/passengers").hasRole("ADMIN")
+                        .requestMatchers("/flight/book", "/flight/verify", "flight/book/cancel", "/flight/book/new",
+                                "flight/book/verify").authenticated())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/"))
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout"))
+                .headers(headers -> headers
+                        .permissionsPolicy(policy -> policy.policy("frame-ancestors 'self'")))
                 .build();
     }
+
 
     @Bean
     public AuthenticationProvider authenticationProvider(){

@@ -38,4 +38,14 @@ public class Flight {
     @JoinColumn(name = "arrival_airport")
     @JsonManagedReference
     private Airport arrivalAirport;
+
+    public Flight(Long flightId, String flightNumber, LocalDate departureDate, LocalDate arrivalDate, LocalTime departureTime, LocalTime arrivalTime, double price) {
+        this.flightId = flightId;
+        this.flightNumber = flightNumber;
+        this.departureDate = departureDate;
+        this.arrivalDate = arrivalDate;
+        this.departureTime = departureTime;
+        this.arrivalTime = arrivalTime;
+        this.price = price;
+    }
 }
