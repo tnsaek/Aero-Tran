@@ -1,8 +1,12 @@
+Done
 1. Users should be able to search for flights.
 2. The system should display a list of available flights.
-3. Once users select a flight, they should be able to choose their preferred seats.
-4. Upon successful booking, users should receive a confirmation email.
-5. Users should have the option to create accounts within the system.
-6. The system should support various payment methods.
-7. Admin should be able to update and manage the flight schedules.
-8. Users should be able to check the real-time status of their flights.
+3. Admin should be able to update and manage the flight schedules.
+4. Users can book for a flight.
+
+TO Be Done
+5. Once users select a flight, they should be able to choose their preferred seats.
+6. Upon successful booking, users should receive a confirmation email.
+7. Users should have the option to create accounts within the system.
+8. The system should support various payment methods.
+9. Users should be able to check the real-time status of their flights.
