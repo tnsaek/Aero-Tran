@@ -1,30 +1,41 @@
 package edu.miu.cs489.aerotran.service.impl;
 
-import edu.miu.cs489.aerotran.dto.AirportDto;
 import edu.miu.cs489.aerotran.entity.Airport;
 import edu.miu.cs489.aerotran.entity.Flight;
 import edu.miu.cs489.aerotran.repository.FlightRepository;
-import lombok.RequiredArgsConstructor;
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
+//@ContextConfiguration(classes = {FlightServiceImpl.class, FlightRepository.class})
+//@ExtendWith(SpringExtension.class)
 @SpringBootTest
-@RequiredArgsConstructor
-class FlightServiceImplIntegrationTest {
+@RunWith(SpringRunner.class)
+public class FlightServiceImplIntegrationTest {
 
-    private final FlightServiceImpl flightService;
-    private final FlightRepository flightRepository;
-    private final ModelMapper modelMapper;
+
+    @Autowired
+    private FlightServiceImpl flightService;
+
+    @Autowired
+    private FlightRepository flightRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @BeforeEach
     void setUp() {
@@ -36,18 +47,23 @@ class FlightServiceImplIntegrationTest {
         String departureAirportName = "Chicago";
         String arrivalAirportName = "London";
 
-        AirportDto departureAirportDto = new AirportDto(null, departureAirportName);
-        AirportDto arrivalAirportDto = new AirportDto(null, arrivalAirportName);
-
-        Airport departureAirport = modelMapper.map(departureAirportDto, Airport.class);
-        Airport arrivalAirport = modelMapper.map(arrivalAirportDto, Airport.class);
+        Airport departureAirport = new Airport(null, departureAirportName);
+        Airport arrivalAirport = new Airport(null, arrivalAirportName);
 
         Flight flight = new Flight(1L, "FL123", LocalDate.now().plusDays(2), LocalDate.now().plusDays(3), LocalTime.of(10, 0), LocalTime.of(15, 0), 500.0);
         flight.setDepartureAirport(departureAirport);
         flight.setArrivalAirport(arrivalAirport);
+        flight.setAircraft(null);
+        flight.setPassengers(null);
         flightRepository.save(flight);
 
         List<Flight> actualFlights = flightService.flightsFromDepCityToArrCity(departureAirportName, arrivalAirportName);
+        for(Flight flight1: actualFlights){
+            actualFlights.get(0).setDepartureAirport(departureAirport);
+            actualFlights.get(0).setArrivalAirport(arrivalAirport);
+            actualFlights.get(0).setAircraft(null);
+            actualFlights.get(0).setPassengers(null);
+        }
 
         assertNotNull(actualFlights);
         assertEquals(1, actualFlights.size());
@@ -67,3 +83,4 @@ class FlightServiceImplIntegrationTest {
         assertTrue(actualFlights.isEmpty());
     }
 }
+

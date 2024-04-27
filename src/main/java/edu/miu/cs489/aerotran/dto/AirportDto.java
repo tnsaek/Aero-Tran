@@ -16,8 +16,4 @@ public class AirportDto {
     private List<FlightDto> flights;
     private AddressDto address;
 
-    public AirportDto(Long airportId, String name) {
-        this.airportId = airportId;
-        this.name = name;
-    }
 }

@@ -26,7 +26,7 @@ public class User implements UserDetails {
     private String username;
     private String email;
     private String password;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "userId")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "roleId")})

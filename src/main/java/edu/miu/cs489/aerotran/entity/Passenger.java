@@ -1,5 +1,6 @@
 package edu.miu.cs489.aerotran.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class Passenger {
     private String email;
     @ManyToOne()
     @JoinColumn(name = "flight_id")
+    @JsonBackReference
     private Flight flight;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")

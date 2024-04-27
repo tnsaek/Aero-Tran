@@ -25,16 +25,17 @@ public class Flight {
     private LocalTime departureTime;
     private LocalTime arrivalTime;
     private double price;
-    @OneToMany(mappedBy = "flight", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Passenger> passengers = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "aircraft_id")
     private Aircraft aircraft;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "departure_airport")
     @JsonManagedReference
     private Airport departureAirport;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "arrival_airport")
     @JsonManagedReference
     private Airport arrivalAirport;

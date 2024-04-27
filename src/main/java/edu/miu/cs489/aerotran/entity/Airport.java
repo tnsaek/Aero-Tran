@@ -30,6 +30,11 @@ public class Airport {
     @JoinColumn(name = "address_id")
     private Address address;
 
+    public Airport(Long airportId, String name) {
+        this.airportId = airportId;
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

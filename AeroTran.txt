@@ -1,12 +1,15 @@
-Done
-1. Users should be able to search for flights.
-2. The system should display a list of available flights.
-3. Admin should be able to update and manage the flight schedules.
-4. Users can book for a flight.
+1. Admin should be able to add available airport.
+2. Admin should be able to add available flight.
+4. Admin should be able to delete flight.
+3. Users should be able to search for flight.
+4. The system should display a list of available flights.
+5. Users should be able to book for a flight.
+6. Users should be to cancel their flight.
+7. Once user select a flight the system should appoint a seat.
 
-TO Be Done
-5. Once users select a flight, they should be able to choose their preferred seats.
-6. Upon successful booking, users should receive a confirmation email.
-7. Users should have the option to create accounts within the system.
-8. The system should support various payment methods.
-9. Users should be able to check the real-time status of their flights.
+To Be Done 
+
+8. Once users select a flight, seat should be able to select their own seat.
+9. Upon successful booking, users should receive a confirmation email.
+10. The system should support various payment methods.
+11. Users should be able to check the real-time status of their flights.

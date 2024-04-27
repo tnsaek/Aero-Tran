@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 <head>
     <meta charset="UTF-8">
@@ -47,17 +47,15 @@
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/flight/book/verify}">Verify Booking</a>
             </li>
-
-
         </ul>
         <div >
             <span style="color: white"></span>
-            <a th:href="@{/logout}">
+            <a sec:authorize="isAuthenticated()" th:href="@{/logout}">
                 <button class="bg-info my-2 my-sm-0" type="submit">Logout</button>
             </a>
         </div>
         <div >
-            <a class="bg-info my-2 my-sm-0" type="submit" th:href="@{/login}">Login</a>
+            <a sec:authorize="isAnonymous()" class="bg-info my-2 my-sm-0" type="submit" th:href="@{/login}">Login</a>
         </div>
     </div>
 </nav>

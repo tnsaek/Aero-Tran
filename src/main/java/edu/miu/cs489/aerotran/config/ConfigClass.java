@@ -11,11 +11,13 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class ConfigClass {
 
@@ -31,11 +33,9 @@ public class ConfigClass {
         return httpSecurity
 //                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/flight/search").permitAll()
-                        .requestMatchers("/aircrafts", "/aircraft/**", "/airports", "/airport/**", "/flights", "/flight/new",
-                                "flight/delete", "/passengers").hasRole("ADMIN")
-                        .requestMatchers("/flight/book", "/flight/verify", "flight/book/cancel", "/flight/book/new",
-                                "flight/book/verify").authenticated())
+                        .requestMatchers("/", "/login").permitAll()
+                        .requestMatchers("/aircrafts","/aircraft/**", "/airports", "/airport/**","/passengers").hasRole("ADMIN")
+                        .requestMatchers("/flight/**").authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
                         .usernameParameter("username")
@@ -44,6 +44,7 @@ public class ConfigClass {
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout"))
+                .authenticationProvider(authenticationProvider())
                 .headers(headers -> headers
                         .permissionsPolicy(policy -> policy.policy("frame-ancestors 'self'")))
                 .build();
