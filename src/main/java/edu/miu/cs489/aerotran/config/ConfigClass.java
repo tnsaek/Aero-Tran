@@ -33,9 +33,10 @@ public class ConfigClass {
         return httpSecurity
 //                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login").permitAll()
-                        .requestMatchers("/aircrafts","/aircraft/**", "/airports", "/airport/**","/passengers").hasRole("ADMIN")
-                        .requestMatchers("/flight/**").authenticated())
+                        .requestMatchers("/", "/login", "/logout", "/flight/search", "/flight/book").permitAll()
+                        .requestMatchers("/aircrafts","/aircraft/**", "/airports", "/airport/**","/passengers","/flights",
+                                "/flight/new", "/flight/delete").hasAuthority("ADMIN")
+                        .requestMatchers("/flight/book/**").authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
                         .usernameParameter("username")

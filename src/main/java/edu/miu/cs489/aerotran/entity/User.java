@@ -2,13 +2,13 @@ package edu.miu.cs489.aerotran.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -23,8 +23,11 @@ public class User implements UserDetails {
     private Long userId;
     private String firstName;
     private String lastName;
+    @NotBlank
     private String username;
+    @NotBlank
     private String email;
+    @NotBlank
     private String password;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference

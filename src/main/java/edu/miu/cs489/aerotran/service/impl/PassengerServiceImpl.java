@@ -39,6 +39,6 @@ public class PassengerServiceImpl implements IPassengerService {
 
     @Override
     public void deletePassenger(Long passengerId) {
-
+        passengerRepository.deleteById(passengerId);
     }
 }

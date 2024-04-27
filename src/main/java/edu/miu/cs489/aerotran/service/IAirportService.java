@@ -2,7 +2,6 @@ package edu.miu.cs489.aerotran.service;
 
 import edu.miu.cs489.aerotran.dto.AirportDto;
 import org.springframework.data.domain.Page;
-
 import java.util.List;
 
 public interface IAirportService {

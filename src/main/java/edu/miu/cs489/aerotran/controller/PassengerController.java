@@ -101,7 +101,7 @@ public class PassengerController {
     public ModelAndView cancelTicket(@RequestParam("passengerId") Long passengerId) {
 
         passengerService.deletePassenger(passengerId);
-        ModelAndView modelAndView = new ModelAndView("secured/flight/flights");
+        ModelAndView modelAndView = new ModelAndView("secured/booking/verifyBooking");
         modelAndView.addObject("flights", flightService.getAllFlightsPaged(0));
         modelAndView.addObject("currentPage", 0);
         return modelAndView;

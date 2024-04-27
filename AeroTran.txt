@@ -1,3 +1,4 @@
+Done
 1. Admin should be able to add available airport.
 2. Admin should be able to add available flight.
 4. Admin should be able to delete flight.
@@ -7,9 +8,8 @@
 6. Users should be to cancel their flight.
 7. Once user select a flight the system should appoint a seat.
 
-To Be Done 
-
-8. Once users select a flight, seat should be able to select their own seat.
+To Be Done
+8. Once users select a flight, user should be able to select their own seat.
 9. Upon successful booking, users should receive a confirmation email.
 10. The system should support various payment methods.
 11. Users should be able to check the real-time status of their flights.

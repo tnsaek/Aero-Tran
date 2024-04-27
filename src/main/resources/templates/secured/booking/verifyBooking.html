@@ -107,7 +107,7 @@
 
                 </tbody>
             </table>
-            <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_AGENT')">
+            <th:block >
                 <form method="post" th:action="@{/flight/book/cancel}">
                     <input type="hidden" th:value="${passenger.passengerId}" name="passengerId">
                     <button type="submit" class="btn btn-sm btn-danger">Cancel This Ticket</button>

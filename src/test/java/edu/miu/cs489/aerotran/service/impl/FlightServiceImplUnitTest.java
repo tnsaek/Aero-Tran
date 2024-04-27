@@ -4,18 +4,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import edu.miu.cs489.aerotran.entity.Address;
-import edu.miu.cs489.aerotran.entity.Airport;
 import edu.miu.cs489.aerotran.entity.Flight;
 import edu.miu.cs489.aerotran.repository.FlightRepository;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -67,8 +62,6 @@ class FlightServiceImplUnitTest {
         assertEquals(expectedFlights, actualFlights);
     }
 
-
-
     @Test
     void testFlightsFromDepCityToArrCity() {
         ArrayList<Flight> flightList = new ArrayList<>();
@@ -81,7 +74,6 @@ class FlightServiceImplUnitTest {
         assertTrue(actualFlightsFromDepCityToArrCityResult.isEmpty());
         assertSame(flightList, actualFlightsFromDepCityToArrCityResult);
     }
-
 
     @Test
     void testCancelFlight() {

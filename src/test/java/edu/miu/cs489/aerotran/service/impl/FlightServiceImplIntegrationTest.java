@@ -3,26 +3,18 @@ package edu.miu.cs489.aerotran.service.impl;
 import edu.miu.cs489.aerotran.entity.Airport;
 import edu.miu.cs489.aerotran.entity.Flight;
 import edu.miu.cs489.aerotran.repository.FlightRepository;
+import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-//@ContextConfiguration(classes = {FlightServiceImpl.class, FlightRepository.class})
-//@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class FlightServiceImplIntegrationTest {
@@ -74,8 +66,6 @@ public class FlightServiceImplIntegrationTest {
     public void testFlightsFromDepCityToArrCity_WithNoFlights() {
         String departureAirport = "Chicago";
         String arrivalAirport = "Tokyo";
-
-        // No pre-populated data, repository should be empty
 
         List<Flight> actualFlights = flightService.flightsFromDepCityToArrCity(departureAirport, arrivalAirport);
 

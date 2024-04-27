@@ -2,6 +2,7 @@ package edu.miu.cs489.aerotran.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ public class Airport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long airportId;
+    @NotBlank(message = "Required airport name")
     private  String name;
     @OneToMany(mappedBy = "departureAirport", cascade = CascadeType.REMOVE)
     @JsonBackReference

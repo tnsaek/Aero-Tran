@@ -2,6 +2,8 @@ package edu.miu.cs489.aerotran.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,11 +33,11 @@ public class Flight {
     @ManyToOne
     @JoinColumn(name = "aircraft_id")
     private Aircraft aircraft;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "departure_airport")
     @JsonManagedReference
     private Airport departureAirport;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "arrival_airport")
     @JsonManagedReference
     private Airport arrivalAirport;

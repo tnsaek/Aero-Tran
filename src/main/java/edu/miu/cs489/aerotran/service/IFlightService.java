@@ -3,7 +3,6 @@ package edu.miu.cs489.aerotran.service;
 import edu.miu.cs489.aerotran.entity.Airport;
 import edu.miu.cs489.aerotran.entity.Flight;
 import org.springframework.data.domain.Page;
-
 import java.time.LocalDate;
 import java.util.List;
 
