@@ -33,11 +33,11 @@ public class Flight {
     @ManyToOne
     @JoinColumn(name = "aircraft_id")
     private Aircraft aircraft;
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "departure_airport")
     @JsonManagedReference
     private Airport departureAirport;
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "arrival_airport")
     @JsonManagedReference
     private Airport arrivalAirport;
